@@ -1,48 +1,34 @@
-import { Nunito } from 'next/font/google'
+import { Noto_Sans } from "next/font/google";
 
-import Navbar from '@/app/components/navbar/Navbar';
-import LoginModal from '@/app/components/modals/LoginModal';
-import RegisterModal from '@/app/components/modals/RegisterModal';
-import SearchModal from '@/app/components/modals/SearchModal';
-import RentModal from '@/app/components/modals/RentModal';
+import Navbar from "@/app/components/navbar/Navbar";
 
-import ToasterProvider from '@/app/providers/ToasterProvider';
+import ToasterProvider from "@/app/components/providers/ToasterProvider";
 
-import './globals.css'
-import ClientOnly from './components/ClientOnly';
-import getCurrentUser from './actions/getCurrentUser';
+import "./globals.css";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
 
-export const metadata = {
-  title: 'Airbnb',
-  description: 'Airbnb Clone',
-}
+const font = Noto_Sans({ weight: "400", subsets: ["latin"] });
 
-const font = Nunito({ 
-  subsets: ['latin'], 
-});
-
+export const metadata: Metadata = {
+  title: "Next3",
+  description: "next-three-demo",
+};
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const currentUser = await getCurrentUser();
-
   return (
-    <html lang="en">
+    <html>
       <body className={font.className}>
-        <ClientOnly>
-          <ToasterProvider />
-          <LoginModal />
-          <RegisterModal />
-          <SearchModal />
-          <RentModal />
-          <Navbar currentUser={currentUser} />
-        </ClientOnly>
-        <div className="pb-20 pt-28">
-          {children}
-        </div>
+        <ToasterProvider />
+        <Navbar />
+        <Suspense fallback={<Loading />}>
+          <div className="pb-20 pt-28 h-full">{children}</div>
+        </Suspense>
       </body>
     </html>
-  )
+  );
 }
