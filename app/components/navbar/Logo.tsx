@@ -9,7 +9,7 @@ const Logo = () => {
   return (
     <Image
       onClick={() => router.push("/")}
-      className="hidden md:block cursor-pointer"
+      className="cursor-pointer"
       src="/next.svg"
       height="100"
       width="100"

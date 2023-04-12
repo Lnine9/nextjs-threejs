@@ -1,4 +1,15 @@
 /** @type {import('next').NextConfig} */
+import nextMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
+import remarkFootnotes from "remark-footnotes";
+import remarkMath from "remark-math";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypePrismPlus from "rehype-prism-plus";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+
 const nextConfig = {
   experimental: {
     appDir: true,
@@ -36,4 +47,24 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+const withMDX = nextMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [
+      remarkGfm,
+      remarkMath,
+      [remarkFootnotes, { inlineNotes: true }],
+    ], // mdx 支持的插件
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+      [rehypePrismPlus, { ignoreMissing: true }],
+    ], // mdx 支持的插件
+  },
+});
+
+export default withMDX({
+  ...nextConfig,
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  swcMinify: true,
+});

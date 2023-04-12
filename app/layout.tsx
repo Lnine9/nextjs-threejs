@@ -5,6 +5,7 @@ import Navbar from "@/app/components/navbar/Navbar";
 import ToasterProvider from "@/app/components/providers/ToasterProvider";
 
 import "./globals.css";
+import "./prism.css";
 import { Metadata } from "next";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
@@ -25,9 +26,11 @@ export default async function RootLayout({
       <body className={font.className}>
         <ToasterProvider />
         <Navbar />
-        <Suspense fallback={<Loading />}>
-          <div className="pb-20 pt-28 h-full">{children}</div>
-        </Suspense>
+        <div className="w-full flex justify-center">
+          <Suspense fallback={<Loading />}>
+            <div className="w-full max-w-screen-xl h-full">{children}</div>
+          </Suspense>
+        </div>
       </body>
     </html>
   );

@@ -2,27 +2,7 @@
 
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { useCallback } from "react";
-
-export enum MenuPath {
-  HOME = "",
-  DOC = "doc",
-  PROJECT = "project",
-}
-
-const Menus = [
-  {
-    path: MenuPath.HOME,
-    title: "首页",
-  },
-  {
-    path: MenuPath.DOC,
-    title: "DOC",
-  },
-  {
-    path: MenuPath.PROJECT,
-    title: "项目",
-  },
-];
+import { MenuPath, Menus } from "@/app/consts/menu";
 
 interface MenuItemProps {
   onClick: () => void;
@@ -69,7 +49,7 @@ const NavMenu = () => {
   );
 
   return (
-    <div className="flex gap-1.5 h-20 items-end">
+    <div className="hidden md:flex gap-1.5 h-full items-end">
       {Menus.map((item) => (
         <MenuItem
           key={item.path}
