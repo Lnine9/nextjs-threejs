@@ -1,8 +1,8 @@
 export enum MenuPath {
   HOME = "",
-  DOC = "doc",
+  POST = "post",
   PROJECT = "project",
-  DOC_COMP = "docComp",
+  DOC = "doc",
 }
 
 export const Menus = [
@@ -11,11 +11,11 @@ export const Menus = [
     title: "首页",
   },
   {
-    path: MenuPath.DOC,
+    path: MenuPath.POST,
     title: "POST",
   },
   {
-    path: MenuPath.DOC_COMP,
+    path: MenuPath.DOC,
     title: "组件",
   },
   {

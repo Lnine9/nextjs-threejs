@@ -6,7 +6,7 @@ import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
-import { createRequire } from "module";
+import {createRequire} from "module";
 
 const require = createRequire(import.meta.url);
 
@@ -54,12 +54,12 @@ const withMDX = nextMDX({
       remarkGfm,
       remarkMath,
       [remarkFootnotes, { inlineNotes: true }],
-    ], // mdx 支持的插件
+    ], // posts 支持的插件
     rehypePlugins: [
       rehypeSlug,
       rehypeAutolinkHeadings,
       [rehypePrismPlus, { ignoreMissing: true }],
-    ], // mdx 支持的插件
+    ], // posts 支持的插件
   },
 });
 

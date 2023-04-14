@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { getAllDoc, getDoc as getOneDoc } from "@/libs/docUtil";
+import { getAllPost, getPost as getOneDoc } from "@/libs/postUtil";
 import { notFound } from "next/navigation";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
@@ -9,7 +9,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
 import Loading from "@/app/loading";
-import MDXRemoteWrapper from "@/app/doc/MDXRemoteWrapper";
+import MDXRemoteWrapper from "@/app/post/MDXRemoteWrapper";
 
 export const dynamicParams = true;
 const getDoc = async (slug: string) => {
@@ -24,12 +24,12 @@ const getDoc = async (slug: string) => {
         remarkGfm,
         remarkMath,
         [remarkFootnotes, { inlineNotes: true }],
-      ], // mdx 支持的插件
+      ], // posts 支持的插件
       rehypePlugins: [
         rehypeSlug,
         rehypeAutolinkHeadings,
         [rehypePrismPlus, { ignoreMissing: true }],
-      ], // mdx 支持的插件
+      ], // posts 支持的插件
       format: "mdx",
     },
   });
@@ -55,7 +55,7 @@ const DocPage = async ({ params }: any) => {
 };
 
 export function generateStaticParams() {
-  return getAllDoc().map((item) => ({ params: { slug: item.data.slug } }));
+  return getAllPost().map((item) => ({ params: { slug: item.data.slug } }));
 }
 
 export default DocPage;

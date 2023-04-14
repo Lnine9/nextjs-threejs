@@ -1,4 +1,4 @@
-export type Doc = {
+export type Post = {
   content: string;
   data: {
     slug: string;
