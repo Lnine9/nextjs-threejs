@@ -1,7 +1,7 @@
 import React from "react";
-import SideBar from "@/app/docComp/SideBar";
+import SideBar from "@/app/components/siderBar/SideBar";
 import { getAllDoc } from "@/libs/docUtil";
-import SmallMenu from "@/app/docComp/SmallMenu";
+import SmallMenu from "@/app/components/siderBar/SmallMenu";
 
 const paths = getAllDoc().map((item) => ({
   slug: item.data.slug,

@@ -26,9 +26,11 @@ export default async function RootLayout({
       <body className={font.className}>
         <ToasterProvider />
         <Navbar />
-        <div className="w-full flex justify-center">
+        <div className="w-full h-full flex justify-center">
           <Suspense fallback={<Loading />}>
-            <div className="w-full max-w-screen-xl h-full">{children}</div>
+            <div className="w-full max-w-screen-xl h-full min-h-[calc(100vh-theme(height.navh))]">
+              {children}
+            </div>
           </Suspense>
         </div>
       </body>

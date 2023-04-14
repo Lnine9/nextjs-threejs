@@ -52,7 +52,7 @@ const SideBar = ({ paths }: SideBarProps) => {
       hidden
       md:flex
       flex-col
-      w-48
+      w-60
       top-[calc(theme(height.navh))]
       h-[calc(100vh-theme(height.navh))]
       sticky
