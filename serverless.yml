@@ -1,0 +1,13 @@
+component: layer
+name: node18Layer
+org: lnine
+app: lnine-blog
+stage: prod
+
+inputs:
+  name: prod
+  region: ap-prod
+  src: ./node_modules
+  runtimes:
+    - Nodejs18.15
+  description: node18

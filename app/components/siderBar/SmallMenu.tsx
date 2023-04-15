@@ -2,6 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { SlArrowRight } from "react-icons/sl";
+import { MenuPath } from "@/app/consts/menu";
 
 const MenuButton = ({
   expanded,
@@ -64,7 +65,7 @@ const SmallMenu = ({ paths }: SmallMenuProps) => {
   const jump = useCallback(
     (slug: string) => {
       setExpanded(false);
-      router.push(`/doc/${slug}`);
+      router.push(`/${MenuPath.POST}/${slug}`);
     },
     [router]
   );

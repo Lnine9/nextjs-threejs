@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback } from "react";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
+import { MenuPath } from "@/app/consts/menu";
 
 interface MenuItemProps {
   onClick: () => void;
@@ -42,7 +43,7 @@ const SideBar = ({ paths }: SideBarProps) => {
   const router = useRouter();
   const jump = useCallback(
     (slug: string) => {
-      router.push(`/doc/${slug}`);
+      router.push(`/${MenuPath.POST}/${slug}`);
     },
     [router]
   );

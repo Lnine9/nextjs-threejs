@@ -1,17 +1,20 @@
 "use client";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
-import { useCallback, useState } from "react";
-import { MenuPath, Menus } from "@/app/consts/menu";
+import { useSelectedLayoutSegment } from "next/navigation";
+import { useState } from "react";
+import { Menus } from "@/app/consts/menu";
+import Link from "next/link";
 
 interface MenuItemProps {
-  onClick: () => void;
+  onClick?: () => void;
   label: string;
+  to: string;
   active?: boolean;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
   onClick,
   label,
+  to,
   active = false,
 }) => {
   return (
@@ -33,7 +36,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
           : "solid 5px transparent",
       }}
     >
-      {label}
+      <Link href={to}>{label}</Link>
     </div>
   );
 };
@@ -77,14 +80,6 @@ const NavMenu = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const segment = useSelectedLayoutSegment() || "";
-  const router = useRouter();
-  const jump = useCallback(
-    (path: MenuPath) => {
-      setExpanded(false);
-      router.push("/" + path);
-    },
-    [router]
-  );
 
   return (
     <div className="md:hidden">
@@ -99,10 +94,11 @@ const NavMenu = () => {
           {Menus.map((item) => (
             <MenuItem
               key={item.path}
-              active={segment === item.path}
               onClick={() => {
-                jump(item.path);
+                setExpanded(false);
               }}
+              active={segment === item.path}
+              to={"/" + item.path}
               label={item.title}
             />
           ))}
