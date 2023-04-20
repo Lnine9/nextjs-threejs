@@ -13,7 +13,7 @@ const MenuButton = ({
 }) => (
   <div
     onClick={onClick}
-    className="w-full h-14 flex px-4 shadow items-center cursor-pointer"
+    className="w-full h-14 flex px-4 border-2 items-center cursor-pointer"
   >
     <SlArrowRight
       className={`mr-2 transform ${
@@ -78,7 +78,10 @@ const SmallMenu = ({ paths }: SmallMenuProps) => {
         }}
       />
       {expanded && (
-        <div className="flex-col w-full min-h-[calc(100vh-theme(height.navh))] z-20 bg-neutral-50 absolute top-[4rem]">
+        <div
+          className="flex-col w-full min-h-[calc(100vh-theme(height.navh))] z-20 bg-neutral-50 absolute top-[4rem]
+        transition-all ease-in-out"
+        >
           {paths.map((item) => (
             <MenuItem
               key={item.slug}

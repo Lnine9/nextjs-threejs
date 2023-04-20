@@ -19,11 +19,15 @@ const MenuItem: React.FC<MenuItemProps> = ({
       onClick={onClick}
       className={`
         px-4
-        py-3
-        hover:bg-neutral-100
-        transition
-        cursor-pointer
+        py-5
         ${active ? "text-primary font-bold" : ""}
+        hover:bg-green-400
+        hover:text-white
+        transition-colors
+        ease-in-out
+        duration-300
+        cursor-pointer
+        
       `}
     >
       {label}
@@ -54,6 +58,7 @@ const SideBar = ({ paths }: SideBarProps) => {
       md:flex
       flex-col
       w-60
+      py4
       top-[calc(theme(height.navh))]
       h-[calc(100vh-theme(height.navh))]
       sticky
