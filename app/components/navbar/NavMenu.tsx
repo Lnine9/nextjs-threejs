@@ -23,15 +23,15 @@ const MenuItem: React.FC<MenuItemProps> = ({
       className="
         px-5
         py-4
-        hover:bg-neutral-100
+        hover:bg-neutral-800
+        hover:text-white
         transition
         cursor-pointer
       "
       style={{
         fontWeight: active ? "bold" : "normal",
-        color: active ? "var(--primary)" : "inherit",
         borderBottom: active
-          ? "solid 3px var(--primary)"
+          ? "solid 3px rgb(23 23 23 / var(--tw-bg-opacity))"
           : "solid 2px transparent",
       }}
     >

@@ -18,12 +18,13 @@ import {
 import { Tween, update } from "@tweenjs/tween.js";
 import frag from "./flyLine.frag.glsl";
 import vert from "./flyLine.vert.glsl";
+import { options } from "axios";
 
 interface FlyLineOption {
-  routeColor?: ColorRepresentation;
   flyColor?: ColorRepresentation;
   duration?: number;
   step?: number;
+  length?: number;
 }
 
 export default class ShaderFlyLine extends AbstractFlyLine {
@@ -44,10 +45,10 @@ export default class ShaderFlyLine extends AbstractFlyLine {
     this.args = args;
     this.group = group || new Group();
     const defaultOptions: FlyLineOption = {
-      routeColor: "#00FF00",
-      flyColor: "#f51d69",
+      flyColor: "#0ebcfd",
       duration: 5000,
-      step: 200,
+      step: 300,
+      length: 200,
     };
     if (options) {
       this.options = { ...defaultOptions, ...options };
@@ -96,27 +97,18 @@ export default class ShaderFlyLine extends AbstractFlyLine {
       });
       const flyLine = new Points(geom, mate);
       this.group.add(flyLine);
-      // const tween = gsap.to(
-      //   { index: 0 },
-      //   {
-      //     index: this.options.step,
-      //     duration: 9000,
-      //     unUpdate: () => {
-      //       mate.uniforms.uTime.value = Math.ceil(tween.vars.index);
-      //     },
-      //     repeat: -1,
-      //   }
-      // );
-      // tween.play();
       const tween = new Tween({ index: 0 })
-        .to({ index: this.options.step }, this.options.duration)
+        .to(
+          { index: this.options.step! + 2 * this.options.length! },
+          this.options.duration
+        )
         .onUpdate((t) => {
           mate.uniforms.uTime.value = Math.ceil(t.index);
         })
         .onComplete(() => {
           this.remove();
         })
-        .repeat(1);
+        .repeat(0);
       tween.start();
     });
     return this.group;

@@ -50,10 +50,10 @@ const DocPage = async ({ params }: any) => {
   }
 
   return (
-    <div className="px-6 md:px-16 py-8 w-full min-h-[calc(100vh-theme(height.navh))]">
+    <div className="px-6 md:px-16 py-8 w-full bg-white h-[2000px] min-h-[calc(100vh-theme(height.navh))]">
       <article className="prose p-4">
-        {params.slug}
-        <p>{post.data.date}</p>
+        <h1>{params.slug}</h1>
+        <p className="text-neutral-500">{post.data.date}</p>
         {post.source.content}
       </article>
     </div>

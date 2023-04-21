@@ -21,6 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           max-w-screen-xl
           space-x-12
           h-navh
+          overflow-hidden
         "
         >
           <Logo />

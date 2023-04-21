@@ -2,14 +2,20 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { getAreas } from "@/app/doc/ChongQingMap/utils";
 import { GroupProps, useFrame, useThree } from "@react-three/fiber";
-import { Vector2, Vector3 } from "three";
+import { ColorRepresentation, Vector2, Vector3 } from "three";
 import ShaderFlyLine from "@/libs/threejs/flyline/ShaderFlyLine";
 import { randInt } from "three/src/math/MathUtils";
 
 const PRIMARY_COLOR = "#6acea5";
-const BORDER_COLOR = "#ffffff";
+const BORDER_COLOR = "#cecece50";
 const HEIGHT = 0.4;
 const HOVER_COLOR = "#529f82";
+const COLORS: ColorRepresentation[] = [
+  "#690302",
+  "#821515",
+  "#ab3939",
+  "#ffaba9",
+];
 
 interface GeoMapProps extends GroupProps {
   geoJson: any;
@@ -26,6 +32,8 @@ const GeoMap = ({ geoJson, setTips, ...rest }: GeoMapProps) => {
         borderColor: BORDER_COLOR,
         height: HEIGHT,
         hoverColor: HOVER_COLOR,
+        colors: COLORS,
+        opacity: 0.75,
       }),
     [geoJson]
   );
@@ -42,17 +50,15 @@ const GeoMap = ({ geoJson, setTips, ...rest }: GeoMapProps) => {
       if (from.canvasCenter instanceof Vector3) {
         const line = new ShaderFlyLine(scene, [
           {
-            from: new Vector3()
-              .copy(from.canvasCenter)
-              .add(new Vector3(-1, -1, 0)),
-            to: new Vector3(0, 0, HEIGHT).add(new Vector3(-1, -1, 0)),
-            height: 1.6 + (Math.random() - 0.5) * 2,
+            from: from.canvasCenter,
+            to: new Vector3(0, 0, HEIGHT),
+            height: 1.6 + (Math.random() - 0.5),
           },
         ]);
       }
     };
 
-    const timer = setInterval(makeLine, 3000);
+    const timer = setInterval(makeLine, 2000);
 
     return () => {
       if (timer) {
@@ -80,13 +86,13 @@ const GeoMap = ({ geoJson, setTips, ...rest }: GeoMapProps) => {
     raycaster.setFromCamera(new Vector2(x, y), camera);
     const intersects = raycaster.intersectObjects(scene.children);
     if (last.current) {
-      last.current.object.material.color.set(PRIMARY_COLOR);
+      last.current.object.material.opacity = 0.75;
       last.current.object.parent.scale.set(1, 1, 1);
     }
     last.current = null;
     last.current = intersects.find((item) => item.object.userData.isArea);
     if (last.current) {
-      last.current.object.material.color.set(HOVER_COLOR);
+      last.current.object.material.opacity = 1;
       last.current.object.parent.scale.set(1, 1, 1.4);
       setTips({
         areaData: last.current.object.userData,
@@ -107,7 +113,7 @@ const GeoMap = ({ geoJson, setTips, ...rest }: GeoMapProps) => {
 
   return (
     <>
-      <group ref={mapRef} castShadow={true} {...rest}>
+      <group ref={mapRef} {...rest}>
         {areas}
       </group>
     </>

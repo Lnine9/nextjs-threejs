@@ -9,12 +9,15 @@ import {
 import { Line } from "@react-three/drei";
 import React from "react";
 import { geoMercator } from "d3";
+import { randInt } from "three/src/math/MathUtils";
 
 type Options = {
   primaryColor: ColorRepresentation;
   borderColor: ColorRepresentation;
   hoverColor: ColorRepresentation;
   height: number;
+  colors?: ColorRepresentation[];
+  opacity: number;
 };
 
 const drawExtrudeMesh = (polygon, projection, options: Options, userData) => {
@@ -31,13 +34,21 @@ const drawExtrudeMesh = (polygon, projection, options: Options, userData) => {
     bevelEnabled: false,
   });
 
+  const color = options.colors
+    ? options.colors[randInt(0, options.colors.length - 1)]
+    : options.primaryColor;
+
   return (
     <group>
-      <mesh geometry={geometry} userData={{ ...userData, isArea: true }}>
+      <mesh
+        geometry={geometry}
+        castShadow={true}
+        userData={{ ...userData, isArea: true }}
+      >
         <meshLambertMaterial
-          color={options.primaryColor}
+          color={color}
           transparent={true}
-          opacity={0.9}
+          opacity={options.opacity}
         />
       </mesh>
       <Line points={upBorder} color={options.borderColor} lineWidth={1} />

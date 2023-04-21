@@ -11,10 +11,10 @@ const paths = getAllPost().map((item) => ({
 
 const DocLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col md:flex-row h-full">
+    <div className="flex flex-col md:flex-row shadow-neutral-300 shadow-2xl">
       <SideBar paths={paths} />
       <SmallMenu paths={paths} />
-      <div className="flex-1 h-full bg-neutral-50">
+      <div className="ml-2 flex-1">
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </div>
     </div>

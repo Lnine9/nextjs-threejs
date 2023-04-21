@@ -7,8 +7,9 @@ export type Item = {
 
 export const DOCS: Item[] = [
   {
-    title: "重庆地图",
+    title: "ChongQingMap",
     path: "ChongQingMap",
     description: "重庆地图",
+    img: "http://rt95zauni.sabkt.gdipper.com/components/ChongQingMap.png",
   },
 ];

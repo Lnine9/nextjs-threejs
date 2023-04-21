@@ -13,7 +13,7 @@ const MenuButton = ({
 }) => (
   <div
     onClick={onClick}
-    className="w-full h-14 flex px-4 border-2 items-center cursor-pointer"
+    className="w-full h-14 flex px-4 bg-neutral-700 text-white items-center cursor-pointer"
   >
     <SlArrowRight
       className={`mr-2 transform ${
@@ -43,7 +43,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         hover:bg-neutral-100
         transition
         cursor-pointer
-        ${active ? "text-primary bg-neutral-100" : ""}
+        ${active ? "font-bold text-xl" : ""}
       `}
     >
       {label}

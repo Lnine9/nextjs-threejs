@@ -1,10 +1,10 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import GeoMap from "@/app/doc/ChongQingMap/GeoMap";
 import chongQingGeoJson from "./chongqing.json";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload } from "@react-three/drei";
-import { Euler } from "three";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls, Preload, Sky } from "@react-three/drei";
+import SkyBox from "@/app/doc/components/SkyBox";
 
 type TipsProps = {
   areaData?: any;
@@ -38,41 +38,46 @@ const Tips = ({ areaData, visible, top, left }: TipsProps) => (
 
 interface Props {}
 
+const CustomCamera = (props) => {
+  const cameraRef = useRef<any>();
+
+  const { set, controls } = useThree();
+
+  useEffect(() => {
+    set({ camera: cameraRef.current });
+    cameraRef.current.position.set(1, -5.4, 4);
+  }, []);
+
+  useFrame(() => {
+    cameraRef.current.updateMatrixWorld();
+  });
+
+  return <perspectiveCamera ref={cameraRef} {...props} />;
+};
+
 const Page: React.FC<Props> = () => {
   const [tips, setTips] = useState<TipsProps>({ visible: false });
-
-  const cameraRef = useRef<any>(null);
 
   return (
     <div className="px-6 md:px-16 py-8 w-full min-h-[calc(100vh-theme(height.navh))]">
       <div className="h-[700px] relative">
-        <Canvas
-          camera={{
-            position: [1, -4.7, 5],
-            rotation: new Euler(0.74, 0.1, -0.1),
-          }}
-          shadows="soft"
-        >
-          <color attach="background" args={["#404956"]} />
+        <Canvas shadows="soft">
+          <Sky />
+          {/*<SkyBox />*/}
           <ambientLight color="#707070" />
-          <directionalLight position={[-6, -6, 8]} intensity={0.75} />
-          <GeoMap
-            geoJson={chongQingGeoJson}
-            setTips={setTips}
-            position={[-1, -1, 0]}
+          <directionalLight
+            position={[-6, -6, 8]}
+            intensity={0.75}
+            castShadow={true}
           />
-          {/*<PerspectiveCamera*/}
-          {/*  makeDefault*/}
-          {/*  position={[1, -4.7, 5]}*/}
-          {/*  rotation={new Euler(0.74, 0.1, -0.1)}*/}
-          {/*  ref={cameraRef}*/}
-          {/*/>*/}
+          <CustomCamera />
+          <GeoMap geoJson={chongQingGeoJson} setTips={setTips} />
           <Preload all />
-          <OrbitControls />
-          <mesh position={[0, 0, -4]}>
-            <planeGeometry args={[100, 100]} />
-            <meshLambertMaterial color="#505050" />
-          </mesh>
+          <OrbitControls target={[1, 1, 0]} />
+          {/*<mesh receiveShadow={true} position={[0, 0, -4]}>*/}
+          {/*  <planeGeometry args={[100, 100]} />*/}
+          {/*  <meshLambertMaterial color={"#f3f3f3"} />*/}
+          {/*</mesh>*/}
         </Canvas>
         <Tips {...tips} />
       </div>

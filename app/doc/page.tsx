@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { DOCS, Item } from "@/app/doc/list";
 import Image from "next/image";
@@ -10,32 +9,35 @@ const Item = (props: Item) => (
     href={"/doc/" + props.path}
     className="
     flex
+    flex-col
+    sm:flex-row
     gap-4
     w-full
-    h-48
-    items-center
-    shadow-xl
-    shadow-neutral-200
+    py-4
+    sm:items-center
+    border
+    shadow-xl shadow-neutral-100
     bg-white
-    hover:bg-neutral-100
-    border-2
+    hover:bg-neutral-700
+    hover:text-white
     rounded-2xl
+    transition-colors ease-in-out
     "
   >
     <Image
       src={props.img || ReactIcon}
+      width={240}
+      height={130}
       alt={props.title}
       className="
       mx-8
       bg-white
-      h-36
-      w-56
       rounded-xl
       "
     />
-    <div className="flex-1">
-      <h2 className="text-2xl whitespace-pre-wrap">{props.title}</h2>
-      <p className="text-neutral-600 whitespace-pre-wrap">
+    <div className="flex-1 mx-8">
+      <h2 className="text-2xl whitespace-pre-wrap mb-2">{props.title}</h2>
+      <p className="text-neutral-500 whitespace-pre-wrap">
         {props.description}
       </p>
     </div>
@@ -46,7 +48,7 @@ const Page = () => {
   return (
     <div className="w-3/4 mx-auto my-8 flex flex-col gap-6">
       {DOCS.map((item) => (
-        <Item {...item} />
+        <Item {...item} key={item.path} />
       ))}
     </div>
   );

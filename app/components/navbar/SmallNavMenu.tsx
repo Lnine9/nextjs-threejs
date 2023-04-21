@@ -23,17 +23,16 @@ const MenuItem: React.FC<MenuItemProps> = ({
       className="
         px-5
         py-4
-        hover:bg-neutral-200
+        hover:bg-white
+        hover:text-neutral-800
         transition
         cursor-pointer
-        bg-neutral-100
+        bg-neutral-800
+        text-white
       "
       style={{
+        fontSize: active ? "large" : "normal",
         fontWeight: active ? "bold" : "normal",
-        color: active ? "var(--primary)" : "inherit",
-        borderLeft: active
-          ? "solid 6px var(--primary)"
-          : "solid 5px transparent",
       }}
     >
       <Link href={to}>{label}</Link>
@@ -60,16 +59,18 @@ const MenuButton = ({
       }
       .expand-line1 {
         width: 24px;
+        background: white;
         transform: translateY(5px) rotate(45deg);
       }
       .expand-line2 {
         width: 24px;
+        background: white;
         transform: translateY(-5px) rotate(-45deg);
       }
     `}</style>
     <div
       onClick={onClick}
-      className="h-full w-20 flex flex-col items-center justify-center space-y-2 bg-white"
+      className="h-full w-20 flex flex-col items-center justify-center space-y-2 z-50 absolute right-2 top-2"
     >
       <div className={`line1 ${expanded && "expand-line1"}`} />
       <div className={`line2 ${expanded && "expand-line2"}`} />
@@ -89,21 +90,26 @@ const NavMenu = () => {
         }}
         expanded={expanded}
       />
-      {expanded && (
-        <div className="flex-col w-screen gap-1.5 h-screen bg-neutral-100 z-50 absolute top-full left-0">
-          {Menus.map((item) => (
-            <MenuItem
-              key={item.path}
-              onClick={() => {
-                setExpanded(false);
-              }}
-              active={segment === item.path}
-              to={"/" + item.path}
-              label={item.title}
-            />
-          ))}
-        </div>
-      )}
+      <div
+        style={{
+          visibility: expanded ? "visible" : "hidden",
+          opacity: expanded ? 1 : 0,
+        }}
+        className="flex-col w-2/5 pt-20 pb-4 rounded-xl gap-1.5
+         h-fit bg-neutral-800 z-40 absolute top-2 right-2 transition-opacity ease-in-out"
+      >
+        {Menus.map((item) => (
+          <MenuItem
+            key={item.path}
+            onClick={() => {
+              setExpanded(false);
+            }}
+            active={segment === item.path}
+            to={"/" + item.path}
+            label={item.title}
+          />
+        ))}
+      </div>
     </div>
   );
 };
