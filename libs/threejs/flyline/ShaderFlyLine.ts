@@ -18,7 +18,6 @@ import {
 import { Tween, update } from "@tweenjs/tween.js";
 import frag from "./flyLine.frag.glsl";
 import vert from "./flyLine.vert.glsl";
-import { options } from "axios";
 
 interface FlyLineOption {
   flyColor?: ColorRepresentation;
