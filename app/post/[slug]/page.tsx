@@ -7,8 +7,8 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrismPlus from "rehype-prism-plus";
 import { compileMDX } from "next-mdx-remote/rsc";
-import Button from "@/app/components/Button";
 import { notFound } from "next/navigation";
+import usedComponents from "@/app/post/[slug]/usedComponents";
 
 export const dynamicParams = true;
 
@@ -36,9 +36,7 @@ const getDoc = cache(async (slug: string) => {
         format: "mdx",
       },
     },
-    components: {
-      Button,
-    },
+    components: usedComponents,
   });
   return { source, data: post.data };
 });
@@ -50,9 +48,9 @@ const DocPage = async ({ params }: any) => {
   }
 
   return (
-    <div className="px-6 md:px-16 py-8 w-full bg-white h-[2000px] min-h-[calc(100vh-theme(height.navh))]">
+    <div className="px-6 md:px-16 py-8 w-full bg-white min-h-[calc(100vh-theme(height.navh))]">
       <article className="prose p-4">
-        <h1>{params.slug}</h1>
+        <h1>{post.data.title}</h1>
         <p className="text-neutral-500">{post.data.date}</p>
         {post.source.content}
       </article>

@@ -13,7 +13,7 @@ const Item = (props: Item) => (
     sm:flex-row
     gap-4
     w-full
-    py-4
+    py-8
     sm:items-center
     border
     shadow-xl shadow-neutral-100

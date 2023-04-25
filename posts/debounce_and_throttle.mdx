@@ -1,0 +1,200 @@
+---
+title : 防抖与节流
+description : 防抖与节流
+tags : ts
+date : 2023/4/15
+---
+## 防抖(debounce)
+触发高频事件后 n 秒内函数只会执行一次，如果 n 秒内高频事件再次被触发，则重新计算时间
+#### 简易版
+```typescript
+function debounce(fn: Function, wait: number) {
+  let timer
+  return function (...args) {
+    if (timer) clearTimeout(timer)
+
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+      timer = null
+    }, wait)
+  }
+}
+```
+
+#### 首次执行、取消操作
+```typescript
+function debounce(
+  fn: Function,
+  wait: number,
+  immediate: boolean = false
+) {
+  let timer
+  let invoking
+  
+  const debouncedFn = function(...args) {
+    // 取消上一次的定时器
+    if (timer) clearTimeout(timer)
+    
+    // 立即执行
+    if (immediate && !invoking) {
+      fn.apply(this, args)
+      invoking = true
+    } else {
+      timer = setTimeout(() => {
+        fn.apply(this, args)
+        invoking = false
+        timer = null
+      }, wait)
+    }
+  }
+  // 取消操作
+  debouncedFn.cancel = function () {
+    if (timer) clearTimeout(timer)
+    timer = null
+    invoking = false
+  }
+  
+  return debouncedFn
+}
+```
+___
+
+<DebouncedInputDemo />
+
+___
+#### 测试代码
+
+```tsx
+function DebouncedInputDemo(props) {
+  const [value, setValue] = useState<string>("");
+  const [log, setLog] = useState<string[]>([]);
+
+  const printValue = useCallback(
+    debounce((value) => {
+      setLog(value);
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    printValue(value);
+  }, [value, printValue]);
+
+  return (
+    <div className="m-4">
+      <Input
+        label="测试"
+        onInput={(event: any) => {
+          setValue(event.target.value);
+        }}
+      />
+      <div className="mt-4 border-2 p-2 min-h-[3rem]">
+        <span className="text-neutral-500 mr-2">log:</span>
+        <span>{log}</span>
+      </div>
+    </div>
+  );
+}
+```
+
+## 节流
+规定在一个单位时间内，只能触发一次函数。如果这个函数单位时间内触发多次函数，只有一次生效。
+#### 简易版
+
+```typescript
+function throttle(fn: Function, interval: number) {
+  let runable = true
+  return function (...args) {
+    if (runable) {
+      runable = false
+      fn.apply(this, args)
+      setTimeout(() => {
+        runable = true
+      }, interval)
+    }
+  }
+}
+```
+#### 最后一次执行、取消操作
+```typescript
+function throttle(
+  fn: Function,
+  interval: number,
+  trailing: boolean = false
+) {
+  let lastTime;
+  let timer;
+
+  const throttledFn = function (...args) {
+    const nowTime = new Date().getTime();
+    if (!lastTime) lastTime = nowTime;
+    //   |-------|---------------|
+    //   |last   |now  remain    |interval
+    const remainTime = interval - (nowTime - lastTime);
+    if (remainTime <= 0) {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+      fn.apply(this, args);
+      lastTime = nowTime;
+    } else {
+      // 最后一次是否执行
+      if (trailing && !timer) {
+        timer = setTimeout(() => {
+          timer = null;
+          lastTime = 0;
+          fn.apply(this, args);
+        }, remainTime);
+      }
+    }
+  };
+
+  throttledFn.cancel = function () {
+    if (timer) clearTimeout(timer);
+    timer = null;
+    lastTime = 0;
+  };
+
+  return throttledFn;
+}
+```
+___
+
+<ThrottledInputDemo />
+
+___
+#### 测试代码
+
+```tsx
+function ThrottledInputDemo(props) {
+  const [value, setValue] = useState<string>("");
+  const [counter, setCounter] = useState<number>(0);
+
+  const updateCounter = useCallback(
+    throttle(() => {
+      setCounter((pre) => pre + 1);
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    updateCounter(value);
+  }, [value, updateCounter]);
+
+  return (
+    <div className="m-4">
+      <Input
+        label="测试"
+        onInput={(event: any) => {
+          setValue(event.target.value);
+        }}
+      />
+      <div className="mt-4 border-2 p-2 min-h-[3rem]">
+        <span className="text-neutral-500 mr-2">触发次数:</span>
+        <span>{counter}</span>
+      </div>
+    </div>
+  );
+}
+```

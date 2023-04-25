@@ -24,7 +24,7 @@ export default async function RootLayout({
   return (
     <html>
       <body className={font.className}>
-        <div className="bak" />
+        <div className="bak hidden md:block" />
         <ToasterProvider />
         <Navbar />
         <div className="w-full flex justify-center">

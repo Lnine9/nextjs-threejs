@@ -14,7 +14,7 @@ const DocLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex flex-col md:flex-row shadow-neutral-300 shadow-2xl">
       <SideBar paths={paths} />
       <SmallMenu paths={paths} />
-      <div className="ml-2 flex-1">
+      <div className="md:ml-2 flex-1">
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </div>
     </div>

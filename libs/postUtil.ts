@@ -6,7 +6,7 @@ import { Post } from "@/types";
 const POSTS_PATH = join(process.cwd(), "posts");
 
 export function getPostsFilePaths(): string[] {
-  return fs.readdirSync(POSTS_PATH).filter((path) => /\.mdx?$/.test(path));
+  return fs.readdirSync(POSTS_PATH).filter((path) => /\.(md|mdx)$/.test(path));
 }
 
 export function getPost(slug: string): Post | undefined {
