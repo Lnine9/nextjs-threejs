@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+:root {
+}
+
+.prose {
+  max-width: 85% !important;
+}
+
+body {
+  background: rgb(210,224,231);
+  background: -moz-radial-gradient(circle, rgba(210,224,231,1) 0%, rgba(226,228,237,1) 50%, rgba(245,245,255,1) 100%);
+  background: -webkit-radial-gradient(circle, rgba(210,224,231,1) 0%, rgba(226,228,237,1) 50%, rgba(245,245,255,1) 100%);
+  background: radial-gradient(circle, rgba(210,224,231,1) 0%, rgba(226,228,237,1) 50%, rgba(245,245,255,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d2e0e7",endColorstr="#f5f5ff",GradientType=1);
+}
+
+.bak {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -200;
+  background-image: linear-gradient(to top, #d5d4d0 0%, #d5d4d0 1%, #eeeeec 31%, #efeeec 75%, #e9e9e7 100%);
+  /*background-position: bottom;*/
+  /*background-image: url("/background.svg");*/
+  /*background-repeat: no-repeat;*/
+  /*background-size: contain;*/
+}

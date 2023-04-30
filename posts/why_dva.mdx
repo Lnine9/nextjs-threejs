@@ -1,0 +1,194 @@
+---
+title : Why Dva
+description : 对比react redux redux-saga dva等状态管理
+tags : react
+date : 2023/4/15
+---
+## React 状态管理
+![why_dva](https://cdn.lnine9.icu/images/why_dva/1682512986156.png?imageView2/0/interlace/1/q/50|imageslim)
+多个组件需要公用一组状态时，传统的React实现方法是状态存放在父组件，且状态与方法通过props传入子组件。
+痛点：
+- 层层传值繁琐，且维护困难
+- 当组件结构变化时，状态需要重新组织
+
+## Redux
+![](https://cdn.lnine9.icu/images/why_dva/1682514436351.png?imageView2/0/interlace/1/q/50|imageslim)
+相对于React的痛点，有以下改进：
+- 讲公共状态提取到独立的store中，耦合度更低, 复用度更高, 扩展性更好
+
+但还是有些痛点：
+- 代码量大
+- 不支持异步action
+
+> Earlier, we said that Redux reducers must never contain "side effects". A "side effect" is any change to state or behavior that can be seen outside of returning a value from a function. Some common kinds of side effects are things like:
+>
+> - Logging a value to the console
+> - Saving a file
+> - Setting an async timer
+> - Making an AJAX HTTP request
+> - Modifying some state that exists outside of a function, or mutating arguments to a function
+> - Generating random numbers or unique random IDs (such as Math.random() or Date.now())
+> - *引用redux官方文档*
+
+redux中的reducer必须是纯函数，不可以含有副作用，例如不可以使用ajax请求。
+
+```js
+function dispatch(action) {
+    ...
+    try {
+      isDispatching = true
+      // 同步执行
+      currentState = currentReducer(currentState, action)
+    } finally {
+      isDispatching = false
+    }
+    // 调用订阅函数
+    const listeners = (currentListeners = nextListeners)
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i]
+      listener()
+    }
+    return action
+}
+```
+从redux的dispatch方法源码中也可以看出对于reducer是同步调用返回state的
+如果要实现异步处理只能在store外，调用多次dispatch
+例如：
+```js
+const { id } = await fetchId();
+store.dispatch({type: 'UPDATE_ID', payload: id});
+const { data } = await fetchData(id);
+store.dispatch({type: 'UPDATE_DATA', payload: data});
+
+```
+但是这样无法做到逻辑复用
+
+## Redux-saga
+![](https://cdn.lnine9.icu/images/why_dva/1682515893421.png?imageView2/0/interlace/1/q/50|imageslim)
+redux-saga是个非常强大处理副作用的工具。它提供了对异步流程更细粒度的控制，对每个异步流程他可以实现暂停、停止、启动三种状态。
+使用中间件的形式监听action，进行异步逻辑处理。
+```js
+function* foo(action) {
+  const {params} = action.payload
+  const id = yield fetchId(params)
+  yield put({type: 'UPDATE_ID', payload: id})
+  const data = yield fetchData(id);
+  yield put({type:'UPDATE_DATA', payload: data})
+}
+
+function* dataSaga() {
+  // 监听FETCH_DATA action
+  yield takeEvery(FETCH_DATA, foo);
+}
+```
+
+## Dva.js
+![](https://cdn.lnine9.icu/images/why_dva/1682517135654.png?imageView2/0/interlace/1/q/50|imageslim)
+正如dva官方文档中写的，Dva.js是react + redux + redux-saga的一个最佳实践，把 store 及 saga 统一为一个 model 的概念, 写在一个 js 文件里面
+且model写法更加简便
+```js
+const model = {
+  namespace: 'count',
+  state: 0,
+  reducers: {
+    add(state) { return state + 1 },
+  },
+  effects: {
+    *addAfter1Second(action, { call, put }) {
+      yield call(delay, 1000);
+      yield put({ type: 'add' });
+    },
+  },
+}
+// 创建应用
+const app = dva();
+app.use(createLoading()) // 使用插件
+// 注册 Model
+app.model(model);
+app.start('#root');
+```
+
+
+## 使用useReducer与useContext实现状态管理
+使用useReducer与useContext两个react的hooks也可以实现状态管理
+示例：
+todoContext.jsx
+```jsx
+import React, { createContext, useContext, useReducer } from 'react';
+
+const initialState = { todos: [] };
+
+const TodoContext = createContext();
+
+const todoReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return { todos: [...state.todos, action.payload] };
+    case 'FINISH_TODO':
+      return { todos: state.todos.map(todo =>
+          todo.id === action.payload ?
+            {...todo, isFinish: true} :
+            todo
+        )};
+    default:
+      return state;
+  }
+};
+
+export const TodoProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(todoReducer, initialState);
+  return (
+    <TodoContext.Provider value={{ state, dispatch }}>
+      {children}
+    </TodoContext.Provider>
+  );
+};
+
+export const useTodoContext = () => useContext(TodoContext);
+```
+todoList.jsx
+```jsx
+const TodoList = () => {
+  const { state, dispatch } = useTodoContext();
+  const { todos } = state;
+
+  const handleFinishTodo = (id) => {
+    dispatch({ type: 'Finish_TODO', payload: id });
+  };
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>
+          {todo.title}{' '}
+          <button onClick={() => handleFinishTodo(todo.id)}>删除</button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+```
+addTodo.jsx
+```jsx
+const AddTodo = () => {
+  const [title, setTitle] = useState('');
+  const { dispatch } = useTodoContext();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (title.trim() !== '') {
+      dispatch({ type: 'ADD_TODO', payload: { id: Date.now(), title } });
+      setTitle('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <button type="submit">添加</button>
+    </form>
+  );
+};
+```
+
+> 图片来源：https://www.yuque.com/flying.ni/the-tower/tvzasn
