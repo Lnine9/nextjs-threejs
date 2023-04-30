@@ -12,7 +12,7 @@ module.exports = {
         primary: "#10b981",
       },
       height: {
-        navh: "80px",
+        navh: "60px",
       },
     },
   },

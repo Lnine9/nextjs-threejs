@@ -29,7 +29,7 @@ export default async function RootLayout({
         <Navbar />
         <div className="w-full flex justify-center">
           <Suspense fallback={<Loading />}>
-            <div className="w-full max-w-screen-xl min-h-[calc(100vh-theme(height.navh))]">
+            <div className="w-full min-h-[calc(100vh-theme(height.navh))]">
               {children}
             </div>
           </Suspense>

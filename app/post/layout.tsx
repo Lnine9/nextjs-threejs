@@ -11,7 +11,7 @@ const paths = getAllPost().map((item) => ({
 
 const DocLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col md:flex-row shadow-neutral-300 shadow-2xl">
+    <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row shadow-neutral-300 shadow-2xl">
       <SideBar paths={paths} />
       <SmallMenu paths={paths} />
       <div className="md:ml-2 flex-1">

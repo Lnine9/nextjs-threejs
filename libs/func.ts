@@ -12,10 +12,12 @@ export function debounce<T>(
 
     // 立即执行
     if (immediate && !invoking) {
+      // @ts-ignore
       fn.apply(this, args);
       invoking = true;
     } else {
       timer = setTimeout(() => {
+        // @ts-ignore
         fn.apply(this, args);
         invoking = false;
         timer = null;
@@ -51,6 +53,7 @@ export function throttle(
         clearTimeout(timer);
         timer = null;
       }
+      // @ts-ignore
       fn.apply(this, args);
       lastTime = nowTime;
     } else {
@@ -59,6 +62,7 @@ export function throttle(
         timer = setTimeout(() => {
           timer = null;
           lastTime = 0;
+          // @ts-ignore
           fn.apply(this, args);
         }, remainTime);
       }

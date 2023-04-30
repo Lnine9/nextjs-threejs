@@ -19,7 +19,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
       onClick={onClick}
       className={`
         px-7
-        py-5
+        py-2
+        my-2
         ${active ? "font-bold text-xl" : ""}
         hover:bg-neutral-800
         hover:text-white
@@ -27,7 +28,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
         ease-in-out
         duration-300
         cursor-pointer
-        
+        rounded-lg
+        mx-2
       `}
     >
       {label}
@@ -63,6 +65,7 @@ const SideBar = ({ paths }: SideBarProps) => {
       h-[calc(100vh-theme(height.navh))]
       sticky
       bg-white
+      z-10
       "
     >
       {paths.map((item) => (

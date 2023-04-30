@@ -44,6 +44,20 @@ const nextConfig = {
       ],
     });
 
+    config.module.rules.push({
+      test: /\.(glb|gltf)$/,
+      use:
+        [
+          {
+            loader: 'file-loader',
+            options:
+              {
+                outputPath: `${isServer ? "../" : ""}static/models/'`
+              }
+          }
+        ]
+    },)
+
     // shader support
     config.module.rules.push({
       test: /\.(glsl|vs|fs|vert|frag)$/,

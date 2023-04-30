@@ -1,16 +1,31 @@
-import Scene from "@/app/components/canvas/Scene";
-import Logo from "@/app/components/canvas/Logo";
+import Burger from "@/app/components/models/burger/Burger";
+import LaptopSection from "@/app/components/homeSections/LaptopSection";
+import { Suspense } from "react";
+import Loader from "@/app/components/Loader";
 import ClientOnly from "@/app/components/ClientOnly";
+import "./home.css";
 
-interface HomeProps {}
-
-const Home = async ({}: HomeProps) => {
+const Home = () => {
   return (
-    <ClientOnly>
-      <Scene className="h-full" shadows="basic">
-        <Logo route="" />
-      </Scene>
-    </ClientOnly>
+    <div
+      id="container"
+      className="h-[calc(100vh-theme(height.navh))] relative overflow-y-scroll"
+    >
+      <ClientOnly>
+        <section className="h-full">
+          <LaptopSection />
+        </section>
+        <section className="h-full">
+          <span className="hash-span" id="burger">
+            &nbsp;
+          </span>
+          <Suspense fallback={<Loader />}>
+            <Burger />
+          </Suspense>
+        </section>
+        <section className="h-full" />
+      </ClientOnly>
+    </div>
   );
 };
 

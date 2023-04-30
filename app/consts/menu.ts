@@ -1,25 +1,20 @@
 export enum MenuPath {
   HOME = "",
   POST = "post",
-  PROJECT = "project",
-  DOC = "doc",
+  WORK = "work",
 }
 
 export const Menus = [
   {
     path: MenuPath.HOME,
-    title: "首页",
+    title: "Home",
   },
   {
     path: MenuPath.POST,
-    title: "POST",
+    title: "Post",
   },
   {
-    path: MenuPath.DOC,
-    title: "组件",
-  },
-  {
-    path: MenuPath.PROJECT,
-    title: "项目",
+    path: MenuPath.WORK,
+    title: "Works",
   },
 ];
